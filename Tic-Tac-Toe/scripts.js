@@ -12,6 +12,19 @@ window.addEventListener('DOMContentLoaded', () => {
     const PLAYERO_WON = 'PLAYERO_WON';
     const TIE = 'TIE';
 
+    const resetBoard = () => {
+      board = ['', '', '', '', '', '', '', '', ''];
+      tiles.forEach((tile) => {
+        tile.innerText = '';
+        tile.classList.remove('playerX', 'playerO', 'winning-tile', 'announcer');
+      });
+      currentPlayer = 'X';
+      playerDisplay.innerText = currentPlayer;
+      playerDisplay.classList.add(`player${currentPlayer}`);
+      isGameActive = true;
+      announcer.classList.add('hide');
+    };
+    
     const winningConditions = [
         [0, 1, 2],
         [3, 4, 5],
@@ -23,12 +36,12 @@ window.addEventListener('DOMContentLoaded', () => {
         [2, 4, 6]
      ];
 
-     const isValidAction = (tile) => {
-        if (tile.innerText === 'X' || tile.innerText === 'O'){
-            return false;
-        }
-    
-        return true;
+    const isValidAction = (tile) => {
+      if (tile.innerText === 'X' || tile.innerText === 'O'){
+          return false;
+      }
+  
+      return true;
     };
 
     const updateBoard =  (index) => {
@@ -45,41 +58,68 @@ window.addEventListener('DOMContentLoaded', () => {
     const announce = (type) => {
         switch(type){
            case PLAYERO_WON:
-                announcer.innerHTML = 'Player <span class="playerO">O</span> Won';
+                announcer.innerHTML = 'Player <span class="playerO">O</span> Won!';
                 break;
            case PLAYERX_WON:
-                announcer.innerHTML = 'Player <span class="playerX">X</span> Won';
+                announcer.innerHTML = 'Player <span class="playerX">X</span> Won!';
                 break;
            case TIE:
-                announcer.innerText = 'Tie';
+                announcer.innerText = "It's a Tie!";
             }
         announcer.classList.remove('hide');
     };
 
     function handleResultValidation() {
-        let roundWon = false;
-        for (let i = 0; i <= 7; i++) {
-          const winCondition = winningConditions[i];
-          const a = board[winCondition[0]];
-          const b = board[winCondition[1]];
-          const c = board[winCondition[2]];
-          if (a === "" || b === "" || c === "") {
-            continue;
-          }
-          if (a === b && b === c) {
-            roundWon = true;
-            break;
-          }
+      let roundWon = false;
+      for (let i = 0; i <= 7; i++) {
+        const winCondition = winningConditions[i];
+        const a = board[winCondition[0]];
+        const b = board[winCondition[1]];
+        const c = board[winCondition[2]];
+        if (a === "" || b === "" || c === "") {
+          continue;
         }
-      
-        if (roundWon) {
-          announce(currentPlayer === "X" ? PLAYERX_WON : PLAYERO_WON);
-          isGameActive = false;
-          return;
+        if (a === b && b === c) {
+          roundWon = true;
+          // Add a class to the winning tiles
+          tiles[winCondition[0]].classList.add("winning-tile");
+          tiles[winCondition[1]].classList.add("winning-tile");
+          tiles[winCondition[2]].classList.add("winning-tile");
+          break;
         }
-      
-        if (!board.includes("")) announce(TIE);
       }
+    
+      if (roundWon) {
+        handleGameResult(currentPlayer === "X" ? PLAYERX_WON : PLAYERO_WON);
+        return;
+      }
+    
+      if (!board.includes("")) handleGameResult(TIE);
+    }
+
+    const handleGameResult = (result) => {
+      isGameActive = false;
+      switch (result) {
+        case PLAYERX_WON:
+          announce(PLAYERX_WON);
+          break;
+        case PLAYERO_WON:
+          announce(PLAYERO_WON);
+          break;
+        case TIE:
+          announce(TIE);
+          break;
+      }
+      // Display an alert with a restart button
+      setTimeout(() => {
+        const restart = confirm("Game Over! Do you want to play again?");
+        if (restart) {
+          resetBoard();
+          // Reset any additional UI changes, such as removing the winning-tile class
+          tiles.forEach((tile) => tile.classList.remove("winning-tile"));
+        }
+      }, 100);
+    };
 
       const userAction = (tile, index) => {
         if (isValidAction(tile) && isGameActive) {
@@ -92,10 +132,6 @@ window.addEventListener('DOMContentLoaded', () => {
       };
 
       tiles.forEach( (tile, index) => {
-        tile.addEventListener('click', () => userAction(tile, index));
-    });
-
-    tiles.forEach( (tile, index) => {
         tile.addEventListener('click', () => userAction(tile, index));
     });
 
