@@ -72,3 +72,23 @@ body .header{
   display: none;
 }
 
+.line {
+    position: absolute;
+    height: 10px;
+    background-color: pink; /* Choose your desired color */
+    z-index: 5; /* Ensure the line appears above the tiles */
+}
+
+.horizontal-line {
+    width: 100%;
+}
+
+.vertical-line {
+    height: 100%;
+}
+
+.diagonal-line {
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
