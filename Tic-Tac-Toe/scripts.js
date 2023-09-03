@@ -1,5 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
-  
+ 
   //gets all classes
     const tiles = Array.from(document.querySelectorAll('.tile'));
     const playerDisplay = document.querySelector('.display-player');
@@ -145,11 +145,11 @@ window.addEventListener('DOMContentLoaded', () => {
               // Vertical line
               const centerX = (tileRectA.left + tileRectA.right) / 2;
               const centerY = (tileRectA.top + tileRectC.bottom) / 2;
-              line.style.transform = 'rotate(90deg)';
-              line.style.width = `${Math.abs(tileRectA.right - tileRectA.left)}px`;
-              line.style.height = '10px';
-              line.style.left = `${centerX - line.offsetWidth / 2}px`;
-              line.style.top = `${centerY - line.offsetHeight / 2}px`;
+              line.style.transform = 'rotate(0deg)';
+              line.style.width = '10px';
+              line.style.height = `${Math.abs(tileRectC.bottom - tileRectA.top)}px`; // Adjust the height
+              line.style.left = `${tileRectA.left + tileRectA.width / 2 - line.offsetWidth / 2}px`; // Center the line horizontally
+              line.style.top = `${tileRectA.top}px`; // Adjust the top position
               line.className = 'line vertical-line';
             } else if (i === 6) {
               // Diagonal line (top-left to bottom-right)

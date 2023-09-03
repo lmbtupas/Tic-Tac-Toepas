@@ -75,8 +75,8 @@ body .header{
 .line {
     position: absolute;
     height: 10px;
-    background-color: pink; /* Choose your desired color */
-    z-index: 5; /* Ensure the line appears above the tiles */
+    background-color: red; /* Choose your desired color */
+    z-index: 9; /* Ensure the line appears above the tiles */
 }
 
 .horizontal-line {
